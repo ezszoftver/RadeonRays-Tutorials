@@ -153,38 +153,7 @@ Buffer* GeneratePrimaryRays()
     g_context.Launch2D(0, gs, ls, kernel);
     g_context.Flush(0);
 
-    return CreateFromOpenClBuffer(g_api, ray_buf);
-}
-
-Buffer* GenerateShadowRays(CLWBuffer<Intersection> & isect, const float3& light)
-{
-    //prepare buffers
-    CLWBuffer<ray> ray_buf = CLWBuffer<ray>::Create(g_context, CL_MEM_READ_WRITE, g_window_width*g_window_height);
-    cl_float4 light_cl = { light.x,
-                            light.y,
-                            light.z,
-                            light.w };
-    
-    //run kernel
-    CLWKernel kernel = g_program.GetKernel("GenerateShadowRays");
-    kernel.SetArg(0, ray_buf);
-    kernel.SetArg(1, g_positions);
-    kernel.SetArg(2, g_normals);
-    kernel.SetArg(3, g_indices);
-    kernel.SetArg(4, g_colors);
-    kernel.SetArg(5, g_indent);
-    kernel.SetArg(6, isect);
-    kernel.SetArg(7, light_cl);
-    kernel.SetArg(8, g_window_width);
-    kernel.SetArg(9, g_window_height);
-
-    // Run generation kernel
-    size_t gs[] = { static_cast<size_t>((g_window_width + 7) / 8 * 8), static_cast<size_t>((g_window_height + 7) / 8 * 8) };
-    size_t ls[] = { 8, 8 };
-    g_context.Launch2D(0, gs, ls, kernel);
-    g_context.Flush(0);
-
-    return CreateFromOpenClBuffer(g_api, ray_buf);
+	return CreateFromOpenClBuffer(g_api, ray_buf);
 }
 
 Buffer* Shading(const CLWBuffer<Intersection> &isect, const float3& light)
@@ -204,7 +173,6 @@ Buffer* Shading(const CLWBuffer<Intersection> &isect, const float3& light)
     kernel.SetArg(3, g_colors);
     kernel.SetArg(4, g_indent);
     kernel.SetArg(5, isect);
-    //kernel.SetArg(6, occluds);
     kernel.SetArg(6, light_cl);
     kernel.SetArg(7, g_window_width);
     kernel.SetArg(8, g_window_height);
@@ -216,7 +184,7 @@ Buffer* Shading(const CLWBuffer<Intersection> &isect, const float3& light)
     g_context.Launch2D(0, gs, ls, kernel);
     g_context.Flush(0);
 
-    return CreateFromOpenClBuffer(g_api, out_buff);
+	return CreateFromOpenClBuffer(g_api, out_buff);
 }
 
 void DrawScene()
@@ -243,48 +211,36 @@ void DrawScene()
 	const int k_raypack_size = g_window_height * g_window_width;
 	// Prepare rays. One for each texture pixel.
 	Buffer* ray_buffer = GeneratePrimaryRays();
-	// Intersection data
+	//// Intersection data
 	CLWBuffer<Intersection> isect_buffer_cl = CLWBuffer<Intersection>::Create(g_context, CL_MEM_READ_WRITE, g_window_width*g_window_height);
 	Buffer* isect_buffer = CreateFromOpenClBuffer(g_api, isect_buffer_cl);
-
+	
 	// Intersection
 	g_api->QueryIntersection(ray_buffer, k_raypack_size, isect_buffer, nullptr, nullptr);
-
+	
 	// Point light position
 	float3 light = { -0.01f, 1.85f, 0.1f };
-
-	// Shadow rays
-	//Buffer* shadow_rays_buffer = GenerateShadowRays(isect_buffer_cl, light);
-	CLWBuffer<int> occl_buffer_cl = CLWBuffer<int>::Create(g_context, CL_MEM_READ_WRITE, g_window_width*g_window_height);
-	Buffer* occl_buffer = CreateFromOpenClBuffer(g_api, occl_buffer_cl);
-
-	// Occlusion
-	//g_api->QueryOcclusion(shadow_rays_buffer, k_raypack_size, occl_buffer, nullptr, nullptr);
-
+	
 	// Shading
 	Buffer* tex_buf = Shading(isect_buffer_cl, light);
-
-	// Get image data
+	//
+	//// Get image data
 	std::vector<unsigned char> tex_data(k_raypack_size * 4);
 	unsigned char* pixels = nullptr;
 	Event* e = nullptr;
 	g_api->MapBuffer(tex_buf, kMapRead, 0, 4 * k_raypack_size * sizeof(unsigned char), (void**)&pixels, &e);
 	e->Wait();
 	memcpy(tex_data.data(), pixels, 4 * k_raypack_size * sizeof(unsigned char));
-
 	
 	// bind gl texture
 	glBindTexture(GL_TEXTURE_2D, g_texture);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, g_window_width, g_window_height, GL_RGBA, GL_UNSIGNED_BYTE, tex_data.data());
 	glBindTexture(GL_TEXTURE_2D, NULL);
-
-
-
-	delete ray_buffer;
-	delete isect_buffer;
-	//delete shadow_rays_buffer;
-	delete occl_buffer;
-	delete tex_buf;
+	
+	g_api->DeleteEvent(e);
+	g_api->DeleteBuffer(ray_buffer);
+	g_api->DeleteBuffer(isect_buffer);
+	g_api->DeleteBuffer(tex_buf);
 
     glDisable(GL_DEPTH_TEST);
     glViewport(0, 0, g_window_width, g_window_height);

@@ -124,54 +124,6 @@ __kernel void GeneratePerspectiveRays(__global Ray* rays,
     }
 }
 
-__kernel void GenerateShadowRays(__global Ray* rays,
-                            //scene
-                            __global float* positions,
-                            __global float* normals,
-                            __global int* ids,
-                            __global float* colors,
-                            __global int* indents,
-                            //intersection
-                            __global Intersection* isect,
-                            //light pos
-                            float4 light,
-                            //window size
-                            int width,
-                            int height)
-{
-    int2 globalid;
-    globalid.x  = get_global_id(0);
-    globalid.y  = get_global_id(1);
-
-    // Check borders
-    if (globalid.x < width && globalid.y < height)
-    {
-        int k = globalid.y * width + globalid.x;
-        int shape_id = isect[k].shapeid;
-        int prim_id = isect[k].primid;
-
-        // Need shadow rays only for intersections
-        if (shape_id == -1 || prim_id == -1)
-        {
-           return;
-        }
-        
-        // Calculate position and normal of the intersection point
-        int ind = indents[shape_id];
-        float4 pos = ConvertFromBarycentric(positions + ind*3, ids + ind, prim_id, &isect[k].uvwt);
-        float4 norm = ConvertFromBarycentric(normals + ind*3, ids + ind, prim_id, &isect[k].uvwt);
-        norm = normalize(norm);
-
-        float4 dir = light - pos;
-        rays[k].d = normalize(dir);
-        rays[k].o = pos + norm * EPSILON;
-        rays[k].o.w = length(dir);
-
-        rays[k].extra.x = 0xFFFFFFFF;
-        rays[k].extra.y = 0xFFFFFFFF;
-   }
-}
-
 __kernel void Shading(//scene
                 __global float* positions,
                 __global float* normals,
