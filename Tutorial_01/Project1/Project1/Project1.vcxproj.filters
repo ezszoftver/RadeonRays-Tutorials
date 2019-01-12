@@ -4,10 +4,35 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shader_manager.cpp" />
     <ClCompile Include="tiny_obj_loader.cpp" />
+    <ClCompile Include="CLWCommandQueue.cpp" />
+    <ClCompile Include="CLWContext.cpp" />
+    <ClCompile Include="CLWDevice.cpp" />
+    <ClCompile Include="CLWEvent.cpp" />
+    <ClCompile Include="CLWImage2D.cpp" />
+    <ClCompile Include="CLWKernel.cpp" />
+    <ClCompile Include="CLWParallelPrimitives.cpp" />
+    <ClCompile Include="CLWPlatform.cpp" />
+    <ClCompile Include="CLWProgram.cpp" />
+    <ClCompile Include="ParameterHolder.cpp" />
+    <ClCompile Include="ReferenceCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader_manager.h" />
     <ClInclude Include="tiny_obj_loader.h" />
+    <ClInclude Include="CLW.h" />
+    <ClInclude Include="CLWBuffer.h" />
+    <ClInclude Include="CLWCommandQueue.h" />
+    <ClInclude Include="CLWContext.h" />
+    <ClInclude Include="CLWDevice.h" />
+    <ClInclude Include="CLWEvent.h" />
+    <ClInclude Include="CLWExcept.h" />
+    <ClInclude Include="CLWImage2D.h" />
+    <ClInclude Include="CLWKernel.h" />
+    <ClInclude Include="CLWParallelPrimitives.h" />
+    <ClInclude Include="CLWPlatform.h" />
+    <ClInclude Include="CLWProgram.h" />
+    <ClInclude Include="ParameterHolder.h" />
+    <ClInclude Include="ReferenceCounter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="kernel.cl" />

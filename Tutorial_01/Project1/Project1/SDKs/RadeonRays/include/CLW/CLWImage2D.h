@@ -57,7 +57,7 @@ public:
     
 private:
 
-    CLWImage2D(cl_mem image);
+	CLWImage2D(cl_mem image);
     friend class CLWContext;
 };
 

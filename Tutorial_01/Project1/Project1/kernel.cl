@@ -79,6 +79,22 @@ float4 ConvertFromBarycentric(__global const float* vec,
     return a * (1 - uvwt->x - uvwt->y) + b * uvwt->x + c * uvwt->y;
 }
 
+float2 ConvertFromBarycentric2(__global const float* vec, 
+                            __global const int* ind, 
+                            int prim_id, 
+                            __global const float4* uvwt)
+{
+    float2 a = (float2)(vec[ind[prim_id * 3 + 0] * 2 + 0],
+                        vec[ind[prim_id * 3 + 0] * 2 + 1]);
+
+    float2 b = (float2)(vec[ind[prim_id * 3 + 1] * 2 + 0],
+                        vec[ind[prim_id * 3 + 1] * 2 + 1]);
+
+    float2 c = (float2)(vec[ind[prim_id * 3 + 2] * 2 + 0],
+                        vec[ind[prim_id * 3 + 2] * 2 + 1]);
+    return a * (1 - uvwt->x - uvwt->y) + b * uvwt->x + c * uvwt->y;
+}
+
 float3 scale(float3 point, float scale)
 {
 	float3 ret;
@@ -124,6 +140,13 @@ __kernel void GeneratePerspectiveRays(__global Ray* rays,
     }
 }
 
+float4 Tex2D(image2d_t image, float2 coord)
+{
+    const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_REPEAT | CLK_FILTER_LINEAR;
+    float4 px = read_imagef(image, sampler, coord );
+    return px;
+}
+
 __kernel void Shading(//scene
                 __global float* positions,
                 __global float* normals,
@@ -136,7 +159,9 @@ __kernel void Shading(//scene
                 float4 light,
                 int width,
                 int height,
-                __global unsigned char* out)
+                __global unsigned char* out,
+				__read_only image2d_t image,
+				__global float* texcoords)
 {
     int2 globalid;
     globalid.x  = get_global_id(0);
@@ -149,6 +174,15 @@ __kernel void Shading(//scene
         int shape_id = isect[k].shapeid;
         int prim_id = isect[k].primid;
 
+		if (shape_id == -1 || prim_id == -1)
+        {
+			out[k * 4 + 0] = 0;
+            out[k * 4 + 1] = 0;
+            out[k * 4 + 2] = 0;
+            out[k * 4 + 3] = 255;
+			return;
+        }
+		else
         {
             // Calculate position and normal of the intersection point
             int ind = indents[shape_id];
@@ -156,24 +190,15 @@ __kernel void Shading(//scene
             float4 pos = ConvertFromBarycentric(positions + ind*3, ids + ind, prim_id, &isect[k].uvwt);
             float4 norm = ConvertFromBarycentric(normals + ind*3, ids + ind, prim_id, &isect[k].uvwt);
             norm = normalize(norm);
+			float2 texcoord = ConvertFromBarycentric2(texcoords + ind*2, ids + ind, prim_id, &isect[k].uvwt);
 
-            //triangle diffuse color
-            int color_id = ind + prim_id*3;
-            float4 diff_col = (float4)( colors[color_id],
-                                        colors[color_id + 1],
-                                        colors[color_id + 2], 1.f);
-
-            // Calculate lighting
-            float4 col = (float4)( 0.f, 0.f, 0.f, 0.f );
-            float4 light_dir = normalize(light - pos);
-            float dot_prod = dot(norm, light_dir);
-            if (dot_prod > 0)
-                col += dot_prod * diff_col;
-
-            out[k * 4] = col.x * 255;
-            out[k * 4 + 1] = col.y * 255;
-            out[k * 4 + 2] = col.z * 255;
+			float4 pixel = Tex2D(image, texcoord);
+			
+            out[k * 4 + 0] = pixel.x * 255;
+            out[k * 4 + 1] = pixel.y * 255;
+            out[k * 4 + 2] = pixel.z * 255;
             out[k * 4 + 3] = 255;
+
         }
     }
 }

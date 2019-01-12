@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include <memory>
 #include "shader_manager.h"
 #include "tiny_obj_loader.h"
+#include "FreeImage.h"
 
 using namespace RadeonRays;
 using namespace tinyobj;
@@ -49,10 +50,11 @@ namespace {
     CLWProgram g_program;
     CLWBuffer<float> g_positions;
     CLWBuffer<float> g_normals;
+	CLWBuffer<float> g_texcoords;
     CLWBuffer<int> g_indices;
     CLWBuffer<float> g_colors;
     CLWBuffer<int> g_indent;
-
+	CLWImage2D image;
 
     struct Camera
     {
@@ -69,11 +71,15 @@ namespace {
 	int fps = 0;
 }
 
+
+
+CLWImage2D texture;
+
 void InitData()
 {
     //Load
     std::string basepath = "./"; 
-    std::string filename = basepath + "orig.objm";
+    std::string filename = basepath + "House.obj";
     std::string res = LoadObj(g_objshapes, g_objmaterials, filename.c_str(), basepath.c_str());
     if (res != "")
     {
@@ -83,6 +89,7 @@ void InitData()
     // Load data to CL
     std::vector<float> verts;
     std::vector<float> normals;
+	std::vector<float> texcoords;
     std::vector<int> inds;
     std::vector<float> colors;
     std::vector<int> indents;
@@ -93,6 +100,7 @@ void InitData()
         const mesh_t& mesh = g_objshapes[id].mesh;
         verts.insert(verts.end(), mesh.positions.begin(), mesh.positions.end());
         normals.insert(normals.end(), mesh.normals.begin(), mesh.normals.end());
+		texcoords.insert(texcoords.end(), mesh.texcoords.begin(), mesh.texcoords.end());
         inds.insert(inds.end(), mesh.indices.begin(), mesh.indices.end());
         for (int mat_id : mesh.material_ids)
         {
@@ -102,38 +110,29 @@ void InitData()
             colors.push_back(mat.diffuse[2]);
         }
         
-        // add additional emty data to simplify indentation in arrays
-        if (mesh.positions.size() / 3 < mesh.indices.size())
-        {
-            int count = mesh.indices.size() - mesh.positions.size() / 3;
-            for (int i = 0; i < count; ++i)
-            {
-                verts.push_back(0.f); normals.push_back(0.f);
-                verts.push_back(0.f); normals.push_back(0.f);
-                verts.push_back(0.f); normals.push_back(0.f);
-            }
-        }
-
         indents.push_back(indent);
         indent += mesh.indices.size();
     }
     g_positions = CLWBuffer<float>::Create(g_context, CL_MEM_READ_ONLY, verts.size(), verts.data());
     g_normals = CLWBuffer<float>::Create(g_context, CL_MEM_READ_ONLY, normals.size(), normals.data());
+	g_texcoords = CLWBuffer<float>::Create(g_context, CL_MEM_READ_ONLY, texcoords.size(), texcoords.data());
     g_indices = CLWBuffer<int>::Create(g_context, CL_MEM_READ_ONLY, inds.size(), inds.data());
     g_colors = CLWBuffer<float>::Create(g_context, CL_MEM_READ_ONLY, colors.size(), colors.data());
     g_indent = CLWBuffer<int>::Create(g_context, CL_MEM_READ_ONLY, indents.size(), indents.data());
+
+	texture = CLWImage2D::CreateFromFile(g_context, "house_tex.bmp");
 }
 
 float fullTime = 0.0f;
+Camera cam;
 
 Buffer* GeneratePrimaryRays()
 {
-	float rotateSpeed = 1.0f;
+	float rotateSpeed = 0.5f;
 	fullTime += ((float)dt) / 1000.0f;
 
     //prepare camera buf
-    Camera cam;
-	cam.pos = { (sin(fullTime * rotateSpeed) * 3.0f), 1.f, (cos(fullTime * rotateSpeed) * 3.0f) };
+	cam.pos = { (sin(fullTime * rotateSpeed) * 10.0f), 3.f, (cos(fullTime * rotateSpeed) * 10.0f) };
     cam.at = {0.f, 1.f, 0.f };
     cam.up = { 0.f, 1.f, 0.f };
     cam.zfar = { 100.0f };
@@ -153,7 +152,7 @@ Buffer* GeneratePrimaryRays()
     g_context.Launch2D(0, gs, ls, kernel);
     g_context.Flush(0);
 
-	return CreateFromOpenClBuffer(g_api, ray_buf);
+    return CreateFromOpenClBuffer(g_api, ray_buf);
 }
 
 Buffer* Shading(const CLWBuffer<Intersection> &isect, const float3& light)
@@ -173,10 +172,13 @@ Buffer* Shading(const CLWBuffer<Intersection> &isect, const float3& light)
     kernel.SetArg(3, g_colors);
     kernel.SetArg(4, g_indent);
     kernel.SetArg(5, isect);
+    //kernel.SetArg(6, occluds);
     kernel.SetArg(6, light_cl);
     kernel.SetArg(7, g_window_width);
     kernel.SetArg(8, g_window_height);
     kernel.SetArg(9, out_buff);
+	kernel.SetArg(10, texture);
+	kernel.SetArg(11, g_texcoords);
 
     // Run generation kernel
     size_t gs[] = { static_cast<size_t>((g_window_width + 7) / 8 * 8), static_cast<size_t>((g_window_height + 7) / 8 * 8) };
@@ -184,7 +186,7 @@ Buffer* Shading(const CLWBuffer<Intersection> &isect, const float3& light)
     g_context.Launch2D(0, gs, ls, kernel);
     g_context.Flush(0);
 
-	return CreateFromOpenClBuffer(g_api, out_buff);
+    return CreateFromOpenClBuffer(g_api, out_buff);
 }
 
 void DrawScene()
@@ -211,36 +213,38 @@ void DrawScene()
 	const int k_raypack_size = g_window_height * g_window_width;
 	// Prepare rays. One for each texture pixel.
 	Buffer* ray_buffer = GeneratePrimaryRays();
-	//// Intersection data
+	// Intersection data
 	CLWBuffer<Intersection> isect_buffer_cl = CLWBuffer<Intersection>::Create(g_context, CL_MEM_READ_WRITE, g_window_width*g_window_height);
 	Buffer* isect_buffer = CreateFromOpenClBuffer(g_api, isect_buffer_cl);
-	
+
 	// Intersection
 	g_api->QueryIntersection(ray_buffer, k_raypack_size, isect_buffer, nullptr, nullptr);
-	
+
 	// Point light position
-	float3 light = { -0.01f, 1.85f, 0.1f };
-	
+	float3 light = { cam.pos };
+
 	// Shading
 	Buffer* tex_buf = Shading(isect_buffer_cl, light);
-	//
-	//// Get image data
+
+	// Get image data
 	std::vector<unsigned char> tex_data(k_raypack_size * 4);
 	unsigned char* pixels = nullptr;
 	Event* e = nullptr;
 	g_api->MapBuffer(tex_buf, kMapRead, 0, 4 * k_raypack_size * sizeof(unsigned char), (void**)&pixels, &e);
 	e->Wait();
 	memcpy(tex_data.data(), pixels, 4 * k_raypack_size * sizeof(unsigned char));
+
 	
 	// bind gl texture
 	glBindTexture(GL_TEXTURE_2D, g_texture);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, g_window_width, g_window_height, GL_RGBA, GL_UNSIGNED_BYTE, tex_data.data());
 	glBindTexture(GL_TEXTURE_2D, NULL);
-	
-	g_api->DeleteEvent(e);
-	g_api->DeleteBuffer(ray_buffer);
-	g_api->DeleteBuffer(isect_buffer);
-	g_api->DeleteBuffer(tex_buf);
+
+
+
+	delete ray_buffer;
+	delete isect_buffer;
+	delete tex_buf;
 
     glDisable(GL_DEPTH_TEST);
     glViewport(0, 0, g_window_width, g_window_height);
@@ -342,6 +346,7 @@ void InitCl()
         {
             if (platforms[i].GetDevice(d).GetType() != CL_DEVICE_TYPE_GPU)
                 continue;
+
             g_context = CLWContext::Create(platforms[i].GetDevice(d));
             break;
         }
@@ -351,7 +356,8 @@ void InitCl()
     }
     const char* kBuildopts(" -cl-mad-enable -cl-fast-relaxed-math -cl-std=CL1.2 -I . ");
 
-    g_program = CLWProgram::CreateFromFile("kernel.cl", kBuildopts, g_context);
+
+	g_program = CLWProgram::CreateFromFile("kernel.cl", kBuildopts, g_context);
 }
 
 void Resize(int width, int height) 

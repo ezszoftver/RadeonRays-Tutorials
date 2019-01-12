@@ -76,8 +76,8 @@
     <OutDir>.\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>SDKs\OpenCL\include;SDKs\RadeonRays\include\RadeonRays\include;SDKs\RadeonRays\include\CLW;SDKs\RadeonRays\include\Calc\inc;SDKs\glew-1.11.0\include;SDKs\freeglut\include;$(IncludePath)</IncludePath>
-    <LibraryPath>SDKs\RadeonRays\lib;SDKs\glew-1.11.0\lib;SDKs\OpenCL\lib;SDKs\freeglut\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>SDKs\FreeImage\include;SDKs\OpenCL\include;SDKs\RadeonRays\include\RadeonRays\include;SDKs\RadeonRays\include\Calc\inc;SDKs\glew-1.11.0\include;SDKs\freeglut\include;$(IncludePath)</IncludePath>
+    <LibraryPath>SDKs\FreeImage\lib;SDKs\RadeonRays\lib;SDKs\glew-1.11.0\lib;SDKs\OpenCL\lib;SDKs\freeglut\lib;$(LibraryPath)</LibraryPath>
     <OutDir>.\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -94,7 +94,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <PreprocessorDefinitions>WIN32;DEBUG;USE_OPENCL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;USE_OPENCL;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -106,7 +106,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>RadeonRays.lib;Calc.lib;CLW.lib;glew32.lib;freeglut.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RadeonRays.lib;Calc.lib;glew32.lib;freeglut.lib;OpenCL.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -143,11 +143,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CLWCommandQueue.cpp" />
+    <ClCompile Include="CLWContext.cpp" />
+    <ClCompile Include="CLWDevice.cpp" />
+    <ClCompile Include="CLWEvent.cpp" />
+    <ClCompile Include="CLWImage2D.cpp" />
+    <ClCompile Include="CLWKernel.cpp" />
+    <ClCompile Include="CLWParallelPrimitives.cpp" />
+    <ClCompile Include="CLWPlatform.cpp" />
+    <ClCompile Include="CLWProgram.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ParameterHolder.cpp" />
+    <ClCompile Include="ReferenceCounter.cpp" />
     <ClCompile Include="shader_manager.cpp" />
     <ClCompile Include="tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CLW.h" />
+    <ClInclude Include="CLWBuffer.h" />
+    <ClInclude Include="CLWCommandQueue.h" />
+    <ClInclude Include="CLWContext.h" />
+    <ClInclude Include="CLWDevice.h" />
+    <ClInclude Include="CLWEvent.h" />
+    <ClInclude Include="CLWExcept.h" />
+    <ClInclude Include="CLWImage2D.h" />
+    <ClInclude Include="CLWKernel.h" />
+    <ClInclude Include="CLWParallelPrimitives.h" />
+    <ClInclude Include="CLWPlatform.h" />
+    <ClInclude Include="CLWProgram.h" />
+    <ClInclude Include="ParameterHolder.h" />
+    <ClInclude Include="ReferenceCounter.h" />
     <ClInclude Include="shader_manager.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
