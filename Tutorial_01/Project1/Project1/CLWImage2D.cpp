@@ -84,6 +84,7 @@ CLWImage2D CLWImage2D::CreateFromFile(cl_context context, char *filename)
 	CLWImage2D ret(clImage);
 
 	clReleaseMemObject(clImage);
+	delete[] buffer;
 
 	return ret;
 }
