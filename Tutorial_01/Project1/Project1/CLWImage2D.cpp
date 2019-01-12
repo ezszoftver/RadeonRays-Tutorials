@@ -77,7 +77,7 @@ CLWImage2D CLWImage2D::CreateFromFile(cl_context context, char *filename)
 
 	cl_int status;
 	cl_mem clImage;
-	clImage = clCreateImage2D(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, &clImageFormat, width, height, 0, buffer, &status);
+	clImage = clCreateImage2D(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, &clImageFormat, width, height, 0, buffer, &status);
 
 	ThrowIf(status != CL_SUCCESS, status, "clCreateImage2D failed");
 
