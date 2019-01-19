@@ -242,9 +242,10 @@ void DrawScene()
 
 
 
-	delete ray_buffer;
-	delete isect_buffer;
-	delete tex_buf;
+	g_api->DeleteBuffer(ray_buffer);
+	g_api->DeleteBuffer(isect_buffer);
+	g_api->DeleteBuffer(tex_buf);
+	g_api->DeleteEvent(e);
 
     glDisable(GL_DEPTH_TEST);
     glViewport(0, 0, g_window_width, g_window_height);
