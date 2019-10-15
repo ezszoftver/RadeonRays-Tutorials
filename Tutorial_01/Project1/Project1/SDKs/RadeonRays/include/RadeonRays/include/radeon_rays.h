@@ -82,7 +82,7 @@ namespace RadeonRays
     };
 
     // Forward declaration of entities
-    using Id = int;
+    typedef int Id;
     const Id kNullId = -1;
 
     // Shape interface to repesent intersectable entities
@@ -91,7 +91,7 @@ namespace RadeonRays
     class RRAPI Shape
     {
     public:
-        virtual ~Shape() = default;
+        virtual ~Shape() = 0;
 
         // World space transform
         virtual void SetTransform(matrix const& m, matrix const& minv) = 0;
@@ -107,6 +107,10 @@ namespace RadeonRays
         // ID of a shape
         virtual void SetId(Id id) = 0;
         virtual Id GetId() const = 0;
+
+        // Geometry mask to mask out intersections
+        virtual void SetMask(int mask) = 0;
+        virtual int  GetMask() const = 0;
     };
 
     // Buffer represents a chunk of memory hosted inside the API
@@ -114,14 +118,14 @@ namespace RadeonRays
     class RRAPI Buffer
     {
     public:
-        virtual ~Buffer() = default;
+        virtual ~Buffer() = 0;
     };
 
     // Synchronization object returned by some API routines.
     class RRAPI Event
     {
     public:
-        virtual ~Event() = default;
+        virtual ~Event() = 0;
         // Indicates whether the related action has been completed
         virtual bool Complete() const = 0;
         // Blocks execution until the event is completed
@@ -132,7 +136,7 @@ namespace RadeonRays
     class RRAPI Exception
     {
     public:
-        virtual ~Exception() = default;
+        virtual ~Exception() = 0;
         virtual char const* what() const = 0;
     };
 
@@ -297,12 +301,15 @@ namespace RadeonRays
         virtual void SetOption(char const* name, float value) = 0;
 
     protected:
-        IntersectionApi() = default;
-        IntersectionApi(IntersectionApi const&) = delete;
-        IntersectionApi& operator = (IntersectionApi const&) = delete;
+        IntersectionApi();
+        IntersectionApi(IntersectionApi const&);
+        IntersectionApi& operator = (IntersectionApi const&);
 
-        virtual ~IntersectionApi() = default;
+        virtual ~IntersectionApi() = 0;
     };
+
+    inline IntersectionApi::IntersectionApi(){}
+    inline IntersectionApi::~IntersectionApi(){}
 
     inline Intersection::Intersection()
         : shapeid(kNullId)
@@ -310,6 +317,10 @@ namespace RadeonRays
     {
     }
 
+    inline Buffer::~Buffer(){}
+    inline Shape::~Shape(){}
+    inline Event::~Event(){}
+    inline Exception::~Exception(){}
 }
 
 

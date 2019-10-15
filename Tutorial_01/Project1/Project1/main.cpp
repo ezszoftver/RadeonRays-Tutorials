@@ -213,7 +213,8 @@ void DrawScene()
 	//for (int i = 0; i < 50; i++) 
 	{
 		// Adding meshes to tracing scene
-		for (int id = 0; id < g_objshapes.size(); ++id)
+		//for (int id = 0; id < g_objshapes.size(); ++id)
+		int id = 0;
 		{
 			shape_t& objshape = g_objshapes[id];
 			float* vertdata = objshape.mesh.positions.data();
@@ -306,7 +307,7 @@ void DrawScene()
     glutSwapBuffers();
 
 	g_api->DetachAll();
-	delete shape;
+	g_api->DeleteShape(shape);
 }
 
 void InitGl()

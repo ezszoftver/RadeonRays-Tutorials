@@ -40,9 +40,8 @@ namespace RadeonRays
         {
             SetMaxT(maxt);
             SetTime(time);
-            SetMask(-1);
+            SetMask(0xFFFFFFFF);
             SetActive(true);
-            SetDoBackfaceCulling(false);
         }
 
         float3 operator ()(float t) const
@@ -90,20 +89,9 @@ namespace RadeonRays
             return extra.y > 0;
         }
 
-        void SetDoBackfaceCulling(bool _bDoBackfaceCulling)
-        {
-            doBackfaceCulling = _bDoBackfaceCulling ? 1 : 0;
-        }
-
-        bool GetDoBackfaceCulling() const
-        {
-            return doBackfaceCulling > 0;
-        }
-
         float4 o;
         float4 d;
         int2 extra;
-        int doBackfaceCulling;
-        int padding;
+        int2 padding;
     };
 }
