@@ -46,7 +46,7 @@ class CLWImage2D : public ReferenceCounter<cl_mem, clRetainMemObject, clReleaseM
 public:
     static CLWImage2D Create(cl_context context, cl_image_format const* imgFormat, size_t width, size_t height, size_t rowPitch);
     static CLWImage2D CreateFromGLTexture(cl_context context, cl_GLint texture);
-	static CLWImage2D CreateFromFile(cl_context context, char *filename);
+	static CLWImage2D CreateFromFile(cl_context context, const char *filename);
 
     CLWImage2D() = default;
     virtual ~CLWImage2D() = default;

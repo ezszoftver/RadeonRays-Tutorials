@@ -52,7 +52,7 @@ CLWImage2D CLWImage2D::Create(cl_context context, cl_image_format const* imgForm
     return image;
 }
 
-CLWImage2D CLWImage2D::CreateFromFile(cl_context context, char *filename) 
+CLWImage2D CLWImage2D::CreateFromFile(cl_context context, const char *filename) 
 {
 	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename, 0);
 	FIBITMAP* image = FreeImage_Load(format, filename);

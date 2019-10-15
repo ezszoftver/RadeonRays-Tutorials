@@ -72,7 +72,7 @@ namespace {
 }
 
 
-
+Shape* shape;
 CLWImage2D texture;
 
 void InitData()
@@ -210,6 +210,26 @@ void DrawScene()
 		sec = 0;
 	}
 
+	//for (int i = 0; i < 50; i++) 
+	{
+		// Adding meshes to tracing scene
+		for (int id = 0; id < g_objshapes.size(); ++id)
+		{
+			shape_t& objshape = g_objshapes[id];
+			float* vertdata = objshape.mesh.positions.data();
+			int nvert = objshape.mesh.positions.size();
+			int* indices = objshape.mesh.indices.data();
+			int nfaces = objshape.mesh.indices.size() / 3;
+			shape = g_api->CreateMesh(vertdata, nvert, 3 * sizeof(float), indices, 0, nullptr, nfaces);
+
+			assert(shape != nullptr);
+			g_api->AttachShape(shape);
+			shape->SetId(id);
+		}
+	}
+	// Ñommit scene changes
+	g_api->Commit();
+
 	const int k_raypack_size = g_window_height * g_window_width;
 	// Prepare rays. One for each texture pixel.
 	Buffer* ray_buffer = GeneratePrimaryRays();
@@ -284,6 +304,9 @@ void DrawScene()
 
     //glFinish();
     glutSwapBuffers();
+
+	g_api->DetachAll();
+	delete shape;
 }
 
 void InitGl()
@@ -415,26 +438,24 @@ int main(int argc, char* argv[])
     // Create intersection API
     g_api = RadeonRays::CreateFromOpenClContext(g_context, id, queue);
     
-    // Adding meshes to tracing scene
-    for (int id = 0; id < g_objshapes.size(); ++id)
-    {
-        shape_t& objshape = g_objshapes[id];
-        float* vertdata = objshape.mesh.positions.data();
-        int nvert = objshape.mesh.positions.size();
-        int* indices = objshape.mesh.indices.data();
-        int nfaces = objshape.mesh.indices.size() / 3;
-        Shape* shape = g_api->CreateMesh(vertdata, nvert, 3 * sizeof(float), indices, 0, nullptr, nfaces);
-
-        assert(shape != nullptr);
-        g_api->AttachShape(shape);
-        shape->SetId(id);
-    }
-    // Ñommit scene changes
-    g_api->Commit();
-
+	//// Adding meshes to tracing scene
+	//for (int id = 0; id < g_objshapes.size(); ++id)
+	//{
+	//	shape_t& objshape = g_objshapes[id];
+	//	float* vertdata = objshape.mesh.positions.data();
+	//	int nvert = objshape.mesh.positions.size();
+	//	int* indices = objshape.mesh.indices.data();
+	//	int nfaces = objshape.mesh.indices.size() / 3;
+	//	Shape* shape = g_api->CreateMesh(vertdata, nvert, 3 * sizeof(float), indices, 0, nullptr, nfaces);
+	//
+	//	assert(shape != nullptr);
+	//	g_api->AttachShape(shape);
+	//	shape->SetId(id);
+	//}
+	//// Ñommit scene changes
+	//g_api->Commit();
     
 	elapsedTime = currentTime = clock();
-    
 
     // Start the main loop
 	glutReshapeFunc(Resize);
