@@ -135,7 +135,7 @@ Buffer* GeneratePrimaryRays()
 	cam.pos = { (sin(fullTime * rotateSpeed) * 10.0f), 3.f, (cos(fullTime * rotateSpeed) * 10.0f) };
     cam.at = {0.f, 1.f, 0.f };
     cam.up = { 0.f, 1.f, 0.f };
-    cam.zfar = { 100.0f };
+    cam.zfar = { 1000.0f };
     CLWBuffer<Camera> camera_buf = CLWBuffer<Camera>::Create(g_context, CL_MEM_READ_ONLY, 1, &cam);
 
     //run kernel
@@ -147,8 +147,8 @@ Buffer* GeneratePrimaryRays()
     kernel.SetArg(3, g_window_height);
 
     // Run generation kernel
-    size_t gs[] = { static_cast<size_t>((g_window_width + 7) / 8 * 8), static_cast<size_t>((g_window_height + 7) / 8 * 8) };
-    size_t ls[] = { 8, 8 };
+    size_t gs[] = { static_cast<size_t>(g_window_width), static_cast<size_t>(g_window_height) };
+    size_t ls[] = { 1, 1 };
     g_context.Launch2D(0, gs, ls, kernel);
     g_context.Flush(0);
 
@@ -181,8 +181,8 @@ Buffer* Shading(const CLWBuffer<Intersection> &isect, const float3& light)
 	kernel.SetArg(11, g_texcoords);
 
     // Run generation kernel
-    size_t gs[] = { static_cast<size_t>((g_window_width + 7) / 8 * 8), static_cast<size_t>((g_window_height + 7) / 8 * 8) };
-    size_t ls[] = { 8, 8 };
+    size_t gs[] = { static_cast<size_t>(g_window_width), static_cast<size_t>(g_window_height) };
+    size_t ls[] = { 1, 1 };
     g_context.Launch2D(0, gs, ls, kernel);
     g_context.Flush(0);
 
