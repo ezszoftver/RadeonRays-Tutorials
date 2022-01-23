@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5EC58CF1-4DE0-370A-ADB7-9A04F65A539A}</ProjectGuid>
+    <RootNamespace>OBJViewer</RootNamespace>
+    <Keyword>QtVS_v303</Keyword>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+  <QtMsBuild Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild></PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolset>v142</PlatformToolset>
+    <OutputDirectory>release\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>release\</IntermediateDirectory>
+    <PrimaryOutput>OBJViewer</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolset>v142</PlatformToolset>
+    <OutputDirectory>debug\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>debug\</IntermediateDirectory>
+    <PrimaryOutput>OBJViewer</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" /><Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')"><Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." /></Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" /><ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')"><Import Project="$(QtMsBuild)\qt_defaults.props" /></ImportGroup><PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"><OutDir>debug\</OutDir><IntDir>debug\</IntDir><TargetName>OBJViewer</TargetName><IgnoreImportLibrary>true</IgnoreImportLibrary></PropertyGroup><PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'"><OutDir>release\</OutDir><IntDir>release\</IntDir><TargetName>OBJViewer</TargetName><IgnoreImportLibrary>true</IgnoreImportLibrary><LinkIncremental>false</LinkIncremental></PropertyGroup><PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"><QtInstall>Qt 5.15.0 x64</QtInstall><QtModules>core;gui;widgets</QtModules></PropertyGroup><PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'"><QtInstall>Qt 5.15.0 x64</QtInstall><QtModules>core;gui;widgets</QtModules></PropertyGroup><ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')"><Import Project="$(QtMsBuild)\qt.props" /></ImportGroup>
+  
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;SDKs\Assimp\include;SDKs\glm\include;SDKs\glew-2.1.0\include;SDKs\FreeImage\include;SDKs\OpenCL\include;SDKs\RadeonRays;SDKs\FMOD\include;release;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ObjectFileName>release\</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DEPRECATED_WARNINGS;USE_OPENCL;NDEBUG;QT_NO_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName></ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    <MultiProcessorCompilation>true</MultiProcessorCompilation></ClCompile>
+    <Link>
+      <AdditionalDependencies>.\SDKs\Assimp\lib\assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;.\SDKs\glew-2.1.0\lib\glew32.lib;.\SDKs\FreeImage\lib\FreeImage.lib;.\SDKs\OpenCL\lib\OpenCL.lib;.\SDKs\RadeonRays\RadeonRays.lib;.\SDKs\FMOD\lib\fmod_vc.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\SDKs\Assimp\lib;.\SDKs\glew-2.1.0\lib;.\SDKs\FreeImage\lib;.\SDKs\OpenCL\lib;.\SDKs\RadeonRays;.\SDKs\FMOD\lib;C:\openssl\lib;C:\Utils\my_sql\mysql-5.7.25-winx64\lib;C:\Utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkIncremental>false</LinkIncremental>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)\OBJViewer.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DEPRECATED_WARNINGS;USE_OPENCL;NDEBUG;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  <QtMoc><CompilerFlavor>msvc</CompilerFlavor><Include>./$(Configuration)/moc_predefs.h</Include><ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription><DynamicSource>output</DynamicSource><QtMocDir>$(Configuration)</QtMocDir><QtMocFileName>moc_%(Filename).cpp</QtMocFileName></QtMoc><QtUic><ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription><QtUicDir>$(ProjectDir)</QtUicDir><QtUicFileName>ui_%(Filename).h</QtUicFileName></QtUic></ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;SDKs\Assimp\include;SDKs\glm\include;SDKs\glew-2.1.0\include;SDKs\FreeImage\include;SDKs\OpenCL\include;SDKs\RadeonRays;SDKs\FMOD\include;debug;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>debug\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ObjectFileName>debug\</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DEPRECATED_WARNINGS;USE_OPENCL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    <MultiProcessorCompilation>true</MultiProcessorCompilation></ClCompile>
+    <Link>
+      <AdditionalDependencies>.\SDKs\Assimp\lib\assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;.\SDKs\glew-2.1.0\lib\glew32.lib;.\SDKs\FreeImage\lib\FreeImage.lib;.\SDKs\OpenCL\lib\OpenCL.lib;.\SDKs\RadeonRays\RadeonRays.lib;.\SDKs\FMOD\lib\fmod_vc.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\SDKs\Assimp\lib;.\SDKs\glew-2.1.0\lib;.\SDKs\FreeImage\lib;.\SDKs\OpenCL\lib;.\SDKs\RadeonRays;.\SDKs\FMOD\lib;C:\openssl\lib;C:\Utils\my_sql\mysql-5.7.25-winx64\lib;C:\Utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <OutputFile>$(OutDir)\OBJViewer.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DEPRECATED_WARNINGS;USE_OPENCL;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  <QtUic><ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription><QtUicDir>$(ProjectDir)</QtUicDir><QtUicFileName>ui_%(Filename).h</QtUicFileName></QtUic><QtMoc><CompilerFlavor>msvc</CompilerFlavor><Include>./$(Configuration)/moc_predefs.h</Include><ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription><DynamicSource>output</DynamicSource><QtMocDir>$(Configuration)</QtMocDir><QtMocFileName>moc_%(Filename).cpp</QtMocFileName></QtMoc></ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="SDKs\RadeonRays\CLWCommandQueue.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\CLWContext.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\CLWDevice.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\CLWEvent.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\CLWImage2D.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\CLWKernel.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\CLWParallelPrimitives.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\CLWPlatform.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\CLWProgram.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\ParameterHolder.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\ReferenceCounter.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\calc.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\calc_clw.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\calc_vkw.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\device_clw.cpp" />
+    <ClCompile Include="SDKs\RadeonRays\device_vkw.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainwindow.cpp" />
+    <ClCompile Include="model.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SDKs\RadeonRays\CLW.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWBuffer.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWCommandQueue.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWContext.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWDevice.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWEvent.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWExcept.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWImage2D.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWKernel.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWParallelPrimitives.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWPlatform.h" />
+    <ClInclude Include="SDKs\RadeonRays\CLWProgram.h" />
+    <ClInclude Include="SDKs\RadeonRays\ParameterHolder.h" />
+    <ClInclude Include="SDKs\RadeonRays\ReferenceCounter.h" />
+    <ClInclude Include="SDKs\RadeonRays\math\bbox.h" />
+    <ClInclude Include="SDKs\RadeonRays\buffer.h" />
+    <ClInclude Include="SDKs\RadeonRays\buffer_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\calc.h" />
+    <ClInclude Include="SDKs\RadeonRays\calc_cl.h" />
+    <ClInclude Include="SDKs\RadeonRays\calc_clw.h" />
+    <ClInclude Include="SDKs\RadeonRays\calc_clw_common.h" />
+    <ClInclude Include="SDKs\RadeonRays\calc_common.h" />
+    <ClInclude Include="SDKs\RadeonRays\calc_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\calc_vkw.h" />
+    <ClInclude Include="SDKs\RadeonRays\kernelcache\clwkernels_cl.h" />
+    <ClInclude Include="SDKs\RadeonRays\common_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\device.h" />
+    <ClInclude Include="SDKs\RadeonRays\device_cl.h" />
+    <ClInclude Include="SDKs\RadeonRays\device_clw.h" />
+    <ClInclude Include="SDKs\RadeonRays\device_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\device_vkw.h" />
+    <ClInclude Include="SDKs\RadeonRays\event.h" />
+    <ClInclude Include="SDKs\RadeonRays\event_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\except.h" />
+    <ClInclude Include="SDKs\RadeonRays\except_clw.h" />
+    <ClInclude Include="SDKs\RadeonRays\except_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\executable.h" />
+    <ClInclude Include="SDKs\RadeonRays\executable_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\math\float2.h" />
+    <ClInclude Include="SDKs\RadeonRays\math\float3.h" />
+    <ClInclude Include="SDKs\RadeonRays\function_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\math\int2.h" />
+    <ClInclude Include="SDKs\RadeonRays\math\int3.h" />
+    <QtMoc Include="mainwindow.h">
+      
+      
+      
+      
+      
+      
+      
+      
+    </QtMoc>
+    <ClInclude Include="SDKs\RadeonRays\math\mathutils.h" />
+    <ClInclude Include="SDKs\RadeonRays\math\matrix.h" />
+    <QtMoc Include="model.h">
+      
+      
+      
+      
+      
+      
+      
+      
+    </QtMoc>
+    <ClInclude Include="SDKs\RadeonRays\primitives.h" />
+    <ClInclude Include="SDKs\RadeonRays\math\quaternion.h" />
+    <ClInclude Include="SDKs\RadeonRays\radeon_rays.h" />
+    <ClInclude Include="SDKs\RadeonRays\radeon_rays_cl.h" />
+    <ClInclude Include="SDKs\RadeonRays\radeon_rays_vk.h" />
+    <ClInclude Include="SDKs\RadeonRays\math\ray.h" />
+    <ClInclude Include="shader.h" />
+    <QtMoc Include="texture.h">
+      
+      
+      
+      
+      
+      
+      
+      
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    
+    
+    
+    
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cl -Bx"$(QTDIR)\bin\qmake.exe" -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -Zi -MDd -std:c++17 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E $(QTDIR)\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;debug\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_predefs.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cl -Bx"$(QTDIR)\bin\qmake.exe" -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -O2 -MD -std:c++17 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E $(QTDIR)\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;release\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_predefs.h;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+    
+    
+    
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="mainwindow.ui">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.tlog\CL.3412.write.1.tlog" />
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.tlog\CL.command.1.tlog" />
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.tlog\CL.read.1.tlog" />
+    <None Include="SDKs\RadeonRays\CL\CLW.cl" />
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.tlog\CLW.lastbuildstate" />
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.log" />
+    <None Include="SDKs\RadeonRays\CLW.lua" />
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.pdb" />
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.tlog\Lib-link.read.1.tlog" />
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.tlog\Lib-link.write.1.tlog" />
+    <None Include="SDKs\RadeonRays\obj\x64\Release\CLW.tlog\Lib.command.1.tlog" />
+    <None Include="SDKs\RadeonRays\RadeonRays.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" /><ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')"><Import Project="$(QtMsBuild)\qt.targets" /></ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
